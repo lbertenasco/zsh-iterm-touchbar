@@ -15,7 +15,7 @@ git_current_branch() {
     [[ $ret == 128 ]] && return  # no git repo.
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
   fi
-  if [[ $1 == short]]; then
+  if [[ $1 == "short"]]; then
     echo ${ref#refs/heads/} | cut -c 1-20
   else
     echo ${ref#refs/heads/}
