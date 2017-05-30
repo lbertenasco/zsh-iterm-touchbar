@@ -15,7 +15,12 @@ git_current_branch() {
     [[ $ret == 128 ]] && return  # no git repo.
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
   fi
-  echo ${ref#refs/heads/} | cut -c 1-20
+  if [[ $1 == 'short']]; then
+    echo ${ref#refs/heads/} | cut -c 1-20
+  else
+    echo ${ref#refs/heads/}
+  fi
+
 }
 
 # Uncommitted changes.
@@ -120,7 +125,7 @@ function _displayDefault() {
 
     [ -n "${indicators}" ] && touchbarIndicators="🔥[${indicators}]" || touchbarIndicators="🙌";
 
-    echo -ne "\033]1337;SetKeyLabel=F2=🎋 $(git_current_branch)\a"
+    echo -ne "\033]1337;SetKeyLabel=F2=🎋 $(git_current_branch short)\a"
     echo -ne "\033]1337;SetKeyLabel=F3=$touchbarIndicators\a"
     echo -ne "\033]1337;SetKeyLabel=F4=✉️ push\a";
 
