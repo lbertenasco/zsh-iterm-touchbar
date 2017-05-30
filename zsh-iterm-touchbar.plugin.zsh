@@ -15,7 +15,7 @@ git_current_branch() {
     [[ $ret == 128 ]] && return  # no git repo.
     ref=$(command git rev-parse --short HEAD 2> /dev/null) || return
   fi
-  echo ${ref#refs/heads/}
+  echo ${ref#refs/heads/} | cut -c 1-20
 }
 
 # Uncommitted changes.
