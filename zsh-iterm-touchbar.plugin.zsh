@@ -135,12 +135,49 @@ function _displayDefault() {
     bindkey -s '^[OS' "git push origin $(git_current_branch) \n"
   fi
 
+  # AGORAPULSE
+  # ------------
+  if [[ `git config --get remote.origin.url | grep "agorapulse/platform"` ]]; then
+    echo -ne "\033]1337;SetKeyLabel=F5=😎 pulse\a"
+    bindkey "${fnKeys[5]}" _displayPulseScripts
+  fi
   # PACKAGE.JSON
   # ------------
   if [[ -f package.json ]]; then
-    echo -ne "\033]1337;SetKeyLabel=F5=⚡️ npm-run\a"
-    bindkey "${fnKeys[5]}" _displayNpmScripts
+    echo -ne "\033]1337;SetKeyLabel=F6=⚡️ npm-run\a"
+    bindkey "${fnKeys[6]}" _displayNpmScripts
   fi
+}
+
+function _displayPulseScripts() {
+
+  _clearTouchbar
+  _unbindTouchbar
+
+  touchBarState='pulse'
+
+  echo -ne "\033]1337;SetKeyLabel=F1=👈 back\a"
+  bindkey "${fnKeys[1]}" _displayDefault
+
+  echo -ne "\033]1337;SetKeyLabel=F2=🏃 start\a"
+  bindkey -s $fnKeys[2] "pulse start pivotalStoryId"
+
+  echo -ne "\033]1337;SetKeyLabel=F3=☝️ up\a"
+  bindkey -s $fnKeys[3] "pulse up \n"
+
+  echo -ne "\033]1337;SetKeyLabel=F4=✉️ commit\a"
+  bindkey -s $fnKeys[4] "pulse commit \n"
+
+  echo -ne "\033]1337;SetKeyLabel=F5=🚀 push\a"
+  bindkey -s $fnKeys[5] "pulse push \n"
+
+  echo -ne "\033]1337;SetKeyLabel=F6=🎉 finish\a"
+  bindkey -s $fnKeys[6] "pulse finish \n"
+
+  echo -ne "\033]1337;SetKeyLabel=F7=🤖 beta\a"
+  bindkey -s $fnKeys[7] "pulse beta \n"
+
+
 }
 
 function _displayNpmScripts() {
@@ -168,13 +205,18 @@ function _displayNpmScripts() {
 
 zle -N _displayDefault
 zle -N _displayNpmScripts
+zle -N _displayPulseScripts
 
 precmd_iterm_touchbar() {
   if [[ $touchBarState == 'npm' ]]; then
     _displayNpmScripts
-  else
-    _displayDefault
+    return
   fi
+  if [[ $touchBarState == 'pulse' ]]; then
+    _displayPulseScripts
+    return
+  fi
+  _displayDefault
 }
 
 autoload -Uz add-zsh-hook
