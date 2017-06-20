@@ -160,7 +160,7 @@ function _displayPulseScripts() {
   bindkey "${fnKeys[1]}" _displayDefault
 
   echo -ne "\033]1337;SetKeyLabel=F2=🏃 start\a"
-  bindkey -s $fnKeys[2] "pulse start pivotalStoryId"
+  bindkey -s $fnKeys[2] "pulse start "
 
   echo -ne "\033]1337;SetKeyLabel=F3=☝️ up\a"
   bindkey -s $fnKeys[3] "pulse up \n"
